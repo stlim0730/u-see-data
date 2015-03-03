@@ -1,3 +1,6 @@
 {
-  "port_number": 8888
+  "port_number": 8888,
+  "public_dir": "/views",
+  "bower_components_dir": "/bower_components",
+  "upload_dir": "/uploads"
 }
