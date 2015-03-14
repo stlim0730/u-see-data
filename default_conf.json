@@ -2,5 +2,6 @@
   "port_number": 18320,
   "public_dir": "/views",
   "bower_components_dir": "/bower_components",
-  "upload_dir": "/uploads"
+  "upload_dir": "/uploads",
+  "db_uri": "mongodb://localhost/u-see-data"
 }
