@@ -1,5 +1,8 @@
 # uSeeData
 ## Instructions
+
+These step-by-step instructions install uSeeData on your local machine.
+
 1. Install Node. https://nodejs.org/
 2. Install MongoDB. After installation, make sure `mongod` runs properly. While `mongod` is running, make sure `mongo` runs properly on another terminal window. http://www.mongodb.org/
 3. Install Bower. http://bower.io/
