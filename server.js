@@ -62,8 +62,8 @@ app.post('/data_upload', [
   multer({ dest: upload_dir }),
   function (req, res) {
     var user_file = req.files.user_data;
-    // TODO: file size limit
-    // TODO: file management per user
+    // TODO: limit file size?
+    // TODO: file management per user: manipulate directory name for data repository
     fs.unlink(user_file.originalname, function (err) { // remove existing file with the same temporary file name
       var random_file_name = upload_dir + '/' + user_file.name;
       var file_name = upload_dir + '/' + user_file.originalname;
@@ -71,6 +71,10 @@ app.post('/data_upload', [
         function (err) {
           if (err) throw err;
           util.log('uploading complete');
+          
+          // parse csv file
+          // TODO
+          
           // update database
           var new_dataset_rep = new Dataset({
             user: 'user', // TODO: user identifier
@@ -79,13 +83,15 @@ app.post('/data_upload', [
             file_size: user_file.size,
             col_num: 0,//Number,
             row_num: 0,//Number,
-            cols: [],//Array,
+            col_names: [],//Array,
             col_types: []//Array
           });
           new_dataset_rep.save(function (err, dataset) {
             if (err) throw err;
-            util.log(dataset.path);
+            util.log('The representation of ' + dataset.path + ' has been saved in database.');
           });
+
+          // redirect the user to somewhere
           res.redirect('/renderer');
       });
     });
