@@ -17,7 +17,11 @@ var express = require('express');
 var multer  = require('multer');
 var fs = require('fs');
 var util = require('./my_util.js');
-var mongoose = require ('mongoose');
+var mongoose = require('mongoose');
+var schema; // require after db connection
+
+// schema classes
+var Dataset; // define after db connection
 
 // set the server
 var app = express();
@@ -26,7 +30,7 @@ app.use('/public', express.static(public_dir));
 app.use('/bower_components', express.static(bower_components_dir));
 app.set('view engine', 'ejs');
 
-// set global varables
+// set server parameters
 var port_number = app.get('port');
 var db_uri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
@@ -35,10 +39,13 @@ var db_uri = process.env.MONGOLAB_URI ||
 // set database
 mongoose.connect(db_uri, function (err, res) {
   if (err) {
-    util.log ('Error in connecting to Mongoose: ' + db_uri + '. ' + err);
+    util.log ('Error in connecting to Mongoose: ' + db_uri);
+    throw err;
   }
   else {
     util.log('Successfully connected to Mongoose: ' + db_uri);
+    schema = require('./schema.js');
+    Dataset = mongoose.model('Dataset', schema.datasetSchema)
   }
 });
 
@@ -55,13 +62,30 @@ app.post('/data_upload', [
   multer({ dest: upload_dir }),
   function (req, res) {
     var user_file = req.files.user_data;
+    // TODO: file size limit
     // TODO: file management per user
     fs.unlink(user_file.originalname, function (err) { // remove existing file with the same temporary file name
-      fs.rename(upload_dir + '/' + user_file.name,
-        upload_dir + '/' + user_file.originalname,
+      var random_file_name = upload_dir + '/' + user_file.name;
+      var file_name = upload_dir + '/' + user_file.originalname;
+      fs.rename(random_file_name, file_name,
         function (err) {
           if (err) throw err;
-          console.log('uploading complete');
+          util.log('uploading complete');
+          // update database
+          var new_dataset_rep = new Dataset({
+            user: 'user', // TODO: user identifier
+            date: new Date(), // TODO: timezone resolution: currently it uses UTC
+            path: file_name,
+            file_size: user_file.size,
+            col_num: 0,//Number,
+            row_num: 0,//Number,
+            cols: [],//Array,
+            col_types: []//Array
+          });
+          new_dataset_rep.save(function (err, dataset) {
+            if (err) throw err;
+            util.log(dataset.path);
+          });
           res.redirect('/renderer');
       });
     });
