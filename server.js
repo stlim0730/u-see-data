@@ -52,5 +52,5 @@ app.post('/data_upload', [
 ]);
 
 // start the server
-app.listen(port_number);
+app.listen(process.env.PORT || port_number);
 util.log('the server is running on ' + port_number);
