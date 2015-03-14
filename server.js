@@ -16,9 +16,10 @@ var upload_dir = __dirname + conf.upload_dir;
 var express = require('express');
 var multer  = require('multer');
 var fs = require('fs');
-var util = require('./my_util.js');
 var mongoose = require('mongoose');
 var schema; // require after db connection
+var util = require('./my_util.js');
+var csv = require('csv-streamify');
 
 // schema classes
 var Dataset; // define after db connection
@@ -73,25 +74,38 @@ app.post('/data_upload', [
           util.log('uploading complete');
           
           // parse csv file
-          // TODO
-          
-          // update database
-          var new_dataset_rep = new Dataset({
-            user: 'user', // TODO: user identifier
-            date: new Date(), // TODO: timezone resolution: currently it uses UTC
-            path: file_name,
-            file_size: user_file.size,
-            col_num: 0,//Number,
-            row_num: 0,//Number,
-            col_names: [],//Array,
-            col_types: []//Array
+          var header = [];
+          var row_num = -1;
+          var fstream = fs.createReadStream(file_name);
+          var parser = csv(require('./default_csv_conf.json'), function () {
+            // update database after parsing
+            var new_dataset_rep = new Dataset({
+              user: 'user', // TODO: user identifier
+              date: new Date(), // TODO: timezone resolution: currently it uses UTC
+              path: file_name,
+              file_size: user_file.size,
+              col_num: header.length,//Number,
+              row_num: row_num,//Number,
+              col_names: header,//Array,
+              col_types: []//Array
+            });
+            new_dataset_rep.save(function (err, dataset) {
+              if (err) throw err;
+              util.log('The representation of ' + dataset.path + ' has been saved in database.');
+            });
           });
-          new_dataset_rep.save(function (err, dataset) {
-            if (err) throw err;
-            util.log('The representation of ' + dataset.path + ' has been saved in database.');
+          parser.on('readable', function () {
+            var record = parser.read();
+            row_num = parser.lineNo; // starts from 1
+            if (row_num == 1) {
+              for (key in record) {
+                header.push(key.trim());
+              }
+            }
           });
+          fstream.pipe(parser);
 
-          // redirect the user to somewhere
+          // redirect the user to somewhere: it's asynchronous!
           res.redirect('/renderer');
       });
     });

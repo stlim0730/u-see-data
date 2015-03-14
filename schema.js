@@ -7,6 +7,6 @@ exports.datasetSchema = mongoose.Schema({
   file_size: Number,
   col_num: Number,
   row_num: Number,
-  cols: Array,
+  col_names: Array,
   col_types: Array
 });

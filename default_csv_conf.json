@@ -1,0 +1,8 @@
+{
+  "delimiter": ",",
+  "newline": "\n",
+  "quote": "\"",
+  "empty": "",
+  "objectMode": true,
+  "columns": true
+}
