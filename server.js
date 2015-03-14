@@ -21,6 +21,7 @@ var util = require('./my_util.js');
 
 // set the server
 var app = express();
+app.set('port', (process.env.PORT || port_number));
 app.use('/public', express.static(public_dir));
 app.use('/bower_components', express.static(bower_components_dir));
 app.set('view engine', 'ejs');
