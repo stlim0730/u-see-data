@@ -10,6 +10,10 @@
   <body>
     This is a renderer that runs after uploading.
     <script src='/public/js/renderer.js'></script>
+    <script>
+      var metadata = <%-JSON.stringify(metadata)%>;
+      console.log(metadata);
+    </script>
   </body>
 
 </html>

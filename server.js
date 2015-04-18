@@ -59,9 +59,13 @@ app.get('/', function (req, res) {
   res.render('index.ejs'); // res.render('index', { title: 'Hey', message: 'Hello there!'}); // this is how to use templates
 });
 
-app.get('/renderer', function (req, res) {
-  res.render('renderer.ejs');
+app.get('/upload', function (req, res) {
+  res.render('upload.ejs');
 });
+
+// app.get('/renderer', function (req, res) {
+//   res.render('renderer.ejs');
+// });
 
 app.post('/data_upload', [
   multer({ dest: upload_dir }),
@@ -119,6 +123,9 @@ app.post('/data_upload', [
               if (err) throw err;
 
               util.log('The representation of ' + dataset.path + ' has been saved in database.');
+
+              // send the metadata back to the client
+              res.render('renderer.ejs', {metadata: new_dataset_rep});
             });
           });
           parser.on('readable', function () {
@@ -161,7 +168,7 @@ app.post('/data_upload', [
           fstream.pipe(parser);
 
           // redirect the user to somewhere: it's asynchronous!
-          res.redirect('/renderer');
+          // res.redirect('/renderer');
       });
     });
   }
