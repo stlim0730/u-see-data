@@ -9,12 +9,13 @@
   },
   "scripts": {
     "start": "node server.js",
-    "postinstall": "bower install",
+    "postinstall": "node_modules/bower/bin/bower install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bower": "^1.4.1",
     "csv-streamify": "^1.0.0",
     "ejs": "^2.3.1",
     "express": "^4.12.1",
