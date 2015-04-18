@@ -2,16 +2,255 @@
 <html>
 
   <head>
+    <title>uSee-Data</title>
+    
+    <meta name='viewport' 
+  content='width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes' />
+    
     <script src='/bower_components/webcomponentsjs/webcomponents.js'></script>
     <script src='/public/js/jquery/jquery-1.11.2.min.js'></script>
-    <link rel="import" href="/bower_components/polymer/polymer.html" />
-  </head>
-  
-  <body>
-    <form id='upload_form' action='data_upload' method='post' enctype='multipart/form-data'>
-      <input id='file_input' name='user_data' type='file' accept='.csv' />
-    </form>
-    <script src='/public/js/init.js'></script>
-  </body>
 
+    <link rel='import' href='/bower_components/font-roboto/roboto.html' />
+    <link rel='import' href='/bower_components/core-header-panel/core-header-panel.html' />
+    <link rel='import' href='/bower_components/core-toolbar/core-toolbar.html' />
+    <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html' />
+    <link rel='import' href='/bower_components/paper-button/paper-button.html' />
+    <link rel='import' href='/bower_components/core-icon-button/core-icon-button.html' />
+    <link rel='import' href='/bower_components/core-transition/core-transition-css.html' />
+    <link rel='import' href='/bower_components/core-overlay/core-overlay.html' />
+
+    <style shim-shadowdom>
+      html,body {
+        height: 100%;
+      }
+
+      body{
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      core-header-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #eee;
+      }
+    
+      core-header-panel[mode=cover]::shadow #mainContainer {
+        left: 70px;
+      }
+
+      .core-header {
+        height: 60px;
+        line-height: 60px;
+        font-size: 28px;
+        padding: 0 20px;
+        background-color: #4F7DC9;
+        color: #FFF;
+        transition: height 0.2s;
+      }
+    
+      .core-header.medium-tall {
+        height: 120px;
+      }
+
+      .content {
+        height: 1000px;
+        background: linear-gradient(rgb(214, 227, 231), lightblue);
+      }
+
+      paper-button[raised]{
+        font-size: 14px;
+        padding: 3px;
+        height: 30px;
+        width: 110px;
+        line-height: 1em;
+      }
+
+      paper-button[raised].hover:hover{
+        background: #eee;
+        font-size: 14px;
+        padding: 3px;
+        height: 30px;
+        width: 110px;
+        line-height: 1em;
+      }
+
+      section {
+        padding: 24px;
+      }
+  </style>
+
+  </head>
+
+  <body unresolved>
+
+    <core-header-panel mode='waterfall-tall' tallClass='medium-tall'>
+      <div class='core-header'>
+        <div horizontal justified layout>
+          <div flex>
+            <a href='index.html'>
+              <img src='/images/uSeeDataLogo.jpg' class='large'>
+            </a>
+          </div>
+
+          <div flex>
+            <paper-tabs id='tabs' selected='all' self-end>
+              <paper-tab name='mission'>Mission</paper-tab>
+              <paper-tab name='team'>Team</paper-tab>
+              <paper-tab name='collab'>Collab</paper-tab>
+              <paper-tab name='testimonials'>Testimonials</paper-tab>
+              <paper-tab name='contactus'>Contact Us</paper-tab>
+            </paper-tabs>
+          </div>
+          
+          <div>
+            <!-- Beginning of SHIT -->
+            <section>
+              <x-container></x-container>
+            </section>
+
+            <!-- a simple dialog element made with core-overlay -->
+            <polymer-element name='x-dialog' attributes='opened autoCloseDisabled'>
+              
+              <template>
+                <style>
+                  :host {
+                    box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-size: 13px;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    overflow: hidden;
+                    background: white;
+                    padding:30px 42px;
+                    outline: 1px solid rgba(0,0,0,0.2);
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                  }
+                </style>
+
+                <core-overlay id='overlay' layered backdrop opened='{{opened}}' autoCloseDisabled='{{autoCloseDisabled}}'  transition='core-transition-center'></core-overlay>
+
+                <content></content>
+              </template>
+
+              <script>
+                Polymer('x-dialog', {
+                
+                  ready: function() {
+                    this.$.overlay.target = this;
+                  },
+
+                  toggle: function() {
+                    this.$.overlay.toggle();
+                  }
+
+                });
+              </script>
+            </polymer-element>
+
+            <!-- an element that uses the x-dialog element and core-overlay -->
+            <polymer-element name='x-container'>
+              <template>
+                <x-dialog id='dialog' class='dialog'>
+                  <!-- place all overlay styles inside the overlay target -->
+                  <style no-shim>
+                    .dialog {
+                      box-sizing: border-box;
+                      -moz-box-sizing: border-box;
+                      font-family: Arial, Helvetica, sans-serif;
+                      font-size: 13px;
+                      -webkit-user-select: none;
+                      -moz-user-select: none;
+                      overflow: hidden;
+                      background: white;
+                      padding:30px 42px;
+                      outline: 1px solid rgba(0,0,0,0.2);
+                      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    }
+
+                    #dialog {
+                      width: 500px;
+                    }
+
+                    paper-button[raised]{
+                      font-size: 14px;
+                      padding: 3px;
+                      height: 30px;
+                      width: 110px;
+                      line-height: 1em;
+                    }
+
+                    paper-button[raised].hover:hover{
+                      background: #eee;
+                      font-size: 14px;
+                      padding: 3px;
+                      height: 30px;
+                      width: 110px;
+                      line-height: 1em;
+                    }
+                  </style>
+
+                  <h2>Sign in screen</h2>
+
+                  <div>
+                    <br />
+                    <core-overlay layered id='confirmation' class='dialog' backdrop transition='core-transition-top'>
+                    <!-- place all overlay styles inside the overlay target -->
+                      <style no-shim>
+                        .dialog {
+                          box-sizing: border-box;
+                          -moz-box-sizing: border-box;
+                          font-family: Arial, Helvetica, sans-serif;
+                          font-size: 13px;
+                          -webkit-user-select: none;
+                          -moz-user-select: none;
+                          overflow: hidden;
+                          background: white;
+                          padding:30px 42px;
+                          outline: 1px solid rgba(0,0,0,0.2);
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                        }
+
+                        #confirmation {
+                          box-sizing: border-box;
+                          text-align: center;
+                          width: 150px;
+                        }
+                      </style>
+                    </core-overlay>
+                  </div>
+                  <br />
+                  <br />
+                </x-dialog>
+
+                <paper-button raised class='hover' on-tap='{{tapHandler}}'>Sign In</paper-button>
+              </template>
+
+              <script>
+                Polymer('x-container', {
+                  // inputHandler: function(e) {
+                  //   if (e.target.value === 'something') {
+                  //     this.$.confirmation.toggle();
+                  //   }
+                  // },
+                  tapHandler: function() {
+                    this.$.dialog.toggle();
+                  }
+                });
+              </script>
+
+            </polymer-element>
+            <!-- END OF SHIT -->
+
+          </div>
+        </div>
+      </div>
+      <div class='content'>
+      </div>
+    </core-header-panel>
+  </body>
 </html>
