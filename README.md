@@ -16,25 +16,20 @@ These step-by-step instructions install uSeeData on your local machine.
   ```
   $ cd u-see-data
   ```
-6. Install node package dependencies. This command will install all the required dependencies.
+6. Install node package dependencies. This command will automatically install all the required dependencies.
 
   ```
   $ npm install
   ```
-7. Install bower package dependencies (only Polymer for now).
-
-  ```
-  $ bower install
-  ```
-8. Run mongodb server.
+7. Run mongodb server.
 
   ```
   $ mongod
   ```
-9. While `mongod` is running, run uSeeData server on another terminal window.
+8. While `mongod` is running, run uSeeData server on another terminal window.
 
   ```
   $ npm start
   ```
-10. Connect to the server on your web browser. [http://localhost:18320](http://localhost:18320)
+9. Connect to the server on your web browser. [http://localhost:18320](http://localhost:18320)
 
