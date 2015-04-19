@@ -67,7 +67,7 @@ app.get('/upload', function (req, res) {
 //   res.render('renderer.ejs');
 // });
 
-app.post('/data_upload', [
+app.post('/visualizer', [
   multer({ dest: upload_dir }),
   function (req, res) {
     var user_file = req.files.user_data;
@@ -125,7 +125,7 @@ app.post('/data_upload', [
               util.log('The representation of ' + dataset.path + ' has been saved in database.');
 
               // send the metadata back to the client
-              res.render('renderer.ejs', {metadata: new_dataset_rep, data: doc});
+              res.render('visualizer.ejs', {metadata: new_dataset_rep, data: doc});
             });
           });
           parser.on('readable', function () {
