@@ -21,6 +21,7 @@
     "core-toolbar": "Polymer/core-toolbar#~0.5.5",
     "paper-tabs": "Polymer/paper-tabs#~0.5.5",
     "core-transition": "Polymer/core-transition#~0.5.5",
-    "core-overlay": "Polymer/core-overlay#~0.5.5"
+    "core-overlay": "Polymer/core-overlay#~0.5.5",
+    "google-signin": "~0.3.0"
   }
 }
