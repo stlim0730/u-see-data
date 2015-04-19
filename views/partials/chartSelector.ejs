@@ -1,0 +1,60 @@
+<link rel='import' href='/bower_components/paper-toggle-button/paper-toggle-button.html'>
+
+<style shim-shadowdom>
+  section {
+    padding: 20px 0;
+  }
+
+  section > div {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  html /deep/ paper-shadow {
+    display: inline-block;
+  }
+
+  img.list{
+    max-width: 120px;
+  }
+
+  core-icon {
+    margin-right: 0.5em;
+  }
+  #sub-title{
+    max-width: 320px
+  }
+  #sub-left {
+   float: left;
+  }
+  #sub-right {
+    float: right;
+  }
+  .clear-both {
+   clear: both;
+  }
+</style>
+
+<section>
+  <div id='sub-title'>
+    <div id='sub-left'>
+      <paper-item id='barchart'>
+        <img class='list' onclick='updateGraphType('bar')' src='/images/bar.png'>
+      </paper-item>
+      <paper-item id='scatterchart'>
+        <img class='list' onclick='updateGraphType('scatter')' src='/images/scatter.png'>
+      </paper-item>
+    </div>
+
+    <div id='sub-right'>
+      <paper-item id='piechart'>
+        <img class='list' onclick='updateGraphType('pie')' src='/images/pie.png'>
+      </paper-item>
+
+      <paper-item id='linechart'>
+        <img class='list' onclick='updateGraphType('line')' src='/images/line.png'>
+      </paper-item>
+    </div>
+    <div class='clear-both'></div>
+  </div>
+</section>

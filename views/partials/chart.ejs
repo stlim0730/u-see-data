@@ -1,0 +1,117 @@
+<script src='/node_modules/d3/d3.min.js'></script>
+<script src='/node_modules/c3/c3.min.js'></script>
+
+<style shim-shadowdom>
+  path {
+    stroke: black;
+    width:1;
+    fill:none;    
+  }
+
+  .c3-chart-lines
+  {
+      fill: none;
+      stroke: #000;
+  }
+</style>
+
+
+<div id = "chart">
+            
+        </div>
+        <script>
+        var mat = json2array(data);
+        var chart = c3.generate({
+                    bindto: '#chart',
+                    data: {
+                      columns: mat
+                    }
+
+                });
+        var typeofChart = 'line';
+
+        function uncheckGraphColumns(column){
+            var columns = new Array(column);
+            chart.unload(columns);
+        }
+
+        function checkGraphColumns(column){
+            var size = mat.length;
+            var selected;
+            for (var i=0;i<size;i++){
+                if (mat[i][0] == column){
+                    selected = mat[i];
+                }
+            }
+            selected = {columns: [selected]};
+            chart.load(selected);
+        }
+
+        function updateGraphType(charttype){
+            typeofChart = charttype;
+            chart = c3.generate({
+                    bindto: '#chart',
+                    data: {
+                      columns: json2array(data),
+                      type: typeofChart
+                    }
+
+            });
+        }
+
+        function updateAxis(axisname, labelname){
+            // typeofChart = "scatter";
+
+
+
+
+            // chart = c3.generate({
+            //         bindto: '#chart',
+            //         data: {
+            //           columns: json2array(data),
+            //           type: typeofChart
+            //         },
+            //         axis:{
+            //             y: {
+            //                 categories: ['mina']
+            //             }
+            //         }
+
+            // });          
+        }
+
+        function json2array(d){
+            var columnnames = new Array();
+            var arr;
+            for (var key in d[0]) {
+                arr = new Array(key);
+                //arr.push(key);
+                columnnames.push(arr);
+            };
+            var length = columnnames.length;
+            var dataSize = d.length;
+            for (var i=0;i<length;i++){
+                var column = columnnames[i];
+                var category = column[0];
+                for (var k = 0; k<dataSize;k++){
+                    var item = d[k];
+                    column.push(item[category]);
+                }
+            }
+            return columnnames;
+        }
+
+        function Unupdate(){
+            var chart = c3.generate({
+            bindto: '#chart',
+            data: {
+              columns: mat
+            }
+
+        });
+        }
+
+
+
+
+        </script>

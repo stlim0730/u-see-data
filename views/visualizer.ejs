@@ -2,16 +2,86 @@
 <html>
 
   <head>
+    <title>uSee-Data</title>
+    
+    <meta name='viewport' 
+  content='width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes' />
+    
     <script src='/bower_components/webcomponentsjs/webcomponents.js'></script>
     <script src='/public/js/jquery/jquery-1.11.2.min.js'></script>
+
+    <link rel='import' href='/bower_components/core-header-panel/core-header-panel.html' />
+    <link rel='import' href='/bower_components/core-toolbar/core-toolbar.html' />
+    <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html' />
+    <link rel='import' href='/bower_components/paper-button/paper-button.html' />
+    <link rel='import' href='/bower_components/core-icon-button/core-icon-button.html' />
+    <link rel='import' href='/bower_components/core-transition/core-transition-css.html' />
+    <link rel='import' href='/bower_components/core-overlay/core-overlay.html' />
+    <link rel='import' href='/bower_components/google-signin/google-signin.html' />
+    <link rel='import' href='/bower_components/google-signin/google-signin-aware.html' />
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:200,400,700' rel='stylesheet' type='text/css' />
+
+    <style shim-shadowdom>
+
+      html, body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Lato', sans-serif;
+        font-weight: 200;
+      }
+
+      core-header-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #eee;
+      }
+
+      .content {
+        height: 1000px;
+        background: linear-gradient(rgb(214, 227, 231), lightblue);
+      }
+
+      .sub-left {
+        float: left;
+      }
+
+      .sub-right {
+        float: right;
+      }
+
+    </style>
   </head>
   
-  <body>
-    This is a visualizer that runs after uploading.
-    <script>
-      var metadata = <%-JSON.stringify(metadata)%>;
-      var data = <%-JSON.stringify(data)%>;
-    </script>
-  </body>
+  <body unresolved>
+    <core-header-panel mode='waterfall-tall' tallClass='medium-tall'>
+      
+      <% include partials/header %>
 
+      <div class='content'>
+        <script>
+          var metadata = <%-JSON.stringify(metadata)%>;
+          var data = <%-JSON.stringify(data)%>;
+        </script>
+        
+        <div class='sub-left'>
+          <% include partials/fieldSelector %>
+          <% include partials/chartSelector %>
+        </div>
+
+        <div class='sub-right'>
+          <% include partials/chart %>
+          <!-- something comes later -->
+        </div>
+
+      </div>
+
+    </core-header-panel>
+  </body>
 </html>

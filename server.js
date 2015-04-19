@@ -12,6 +12,7 @@ else {
 // set directories
 var public_dir = __dirname + conf.public_dir;
 var bower_components_dir = __dirname + conf.bower_components_dir;
+var node_modules_dir = __dirname + conf.node_modules_dir;
 var image_dir = public_dir + conf.image_dir;
 var upload_dir = __dirname + conf.upload_dir;
 
@@ -32,6 +33,7 @@ var app = express();
 app.set('port', (process.env.PORT || conf.port_number));
 app.use('/public', express.static(public_dir));
 app.use('/bower_components', express.static(bower_components_dir));
+app.use('/node_modules', express.static(node_modules_dir));
 app.use('/images', express.static(image_dir));
 app.set('view engine', 'ejs');
 

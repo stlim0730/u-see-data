@@ -1,0 +1,55 @@
+<style>
+  div {
+    text-align: center;
+  }
+
+  div.wrapper {
+    height: 90%;
+  }
+
+  paper-button[raised] {
+    margin-top: 50px;
+    height: 30%;
+    width: 70%;
+    text-align: center;
+  }
+
+  paper-button[raised]:hover {
+    background: #eee;
+  }
+
+  paper-button[raised] > div {
+    width: 100%;
+  }
+
+  label {
+    font-size: 3.5em;
+    color: #555;
+  }
+</style>
+
+<div class='wrapper'>
+  <paper-button raised>
+    <div>
+      <br /><br /><br /><br />
+      <label for='file_input'>Upload Your CSV File</label>
+      <form id='upload_form' action='visualizer' method='post' enctype='multipart/form-data'>
+        <input id='file_input' name='user_data' type='file' accept='.csv' style = 'opacity: 0' />
+      </form>
+    </div>
+  </paper-button>
+
+  <script>
+    $('#file_input').on('change', function (event) {
+      $('#upload_form').submit();
+    });
+
+    $('paper-button').click(function (e) {
+      $('label')[0].click();
+    });
+
+    $('label').click(function (e) {
+      e.stopPropagation();
+    });
+  </script>
+</div>
