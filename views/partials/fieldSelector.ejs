@@ -1,11 +1,6 @@
 <link rel="import" href="/bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <style shim-shadowdom>
-  /*body {
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-touch-callout: none;
-  }*/
-  
   section {
     width: 200px;
   }
@@ -16,6 +11,19 @@
 
   paper-toggle-button.bluetooth::shadow [checked] .toggle {
     background-color: #4285f4;
+  }
+
+  td{
+    height: 50px;
+    min-width: 70px;
+  }
+
+  .spacingMiddle{
+    height: 5px;
+  }
+
+  .spacingBelow{
+    height: 20px;
   }
 </style>
 
@@ -36,48 +44,50 @@
     }
   }
 
-  // var test = {
-  //   "col_names": ["col1", "col2"],
-  //   "col_num" : 3,
-  //   "num_rows": 50,
-  //   "date": "April 18, 2015",
-  //   "file_size": 1114
-  // };
-  // console.log(test.col_names);
   var test = metadata;
-  var div = document.createElement("div");
+  var table = document.createElement("table");
+  // TO MAKE MORE COLLUMS CHANGE NUM_OF_COLS
+  var num_of_cols = 4;
+  for(var i = 0; i < test.col_names.length + num_of_cols; i=i+num_of_cols){
+    var row = document.createElement("tr");
+    for(var j = i; j < test.col_names.length && j < i+num_of_cols; j++){
+      //PARENT DIV
+      var td = document.createElement("td");
 
-  var colors = ["red", "blue", "black"];
+      //DIV FOR LABEL
+      var subdiv1 = document.createElement("div");
+      var label = document.createTextNode(test.col_names[j]);
+      subdiv1.setAttribute("align", "center");
+      subdiv1.appendChild(label);
 
-  for(var i =0; i < test.col_names.length; i++) {
-    //PARENT DIV
-    var text = document.createElement("div");
-    text.style.height="50px";
-    text.style.width="100px";
+      // SPACING DIV
+      spacingDivMiddle = document.createElement("div");
+      spacingDivMiddle.setAttribute("class", "spacingMiddle");
 
-    //DIV FOR LABEL
-    var subdiv1 = document.createElement("div");
-    var label = document.createTextNode(test.col_names[i]);
-    subdiv1.setAttribute("align", "center");
-    subdiv1.setAttribute("vertical-align", "bottom");
-    subdiv1.appendChild(label);
+      // SPACING DIV
+      spacingDivBelow = document.createElement("div");
+      spacingDivBelow.setAttribute("class", "spacingBelow");
 
-    // CREATE BUTTON AND STYLE
-    var button = document.createElement("paper-toggle-button");
-    button.setAttribute("class", "bluetooth");
-    button.setAttribute("id", test.col_names[i]);
-    button.addEventListener("change", function() {flipState(this);})
-    
-    // DIV FOR BUTTON
-    var subdiv2 = document.createElement("div");
-    subdiv2.setAttribute("align", "center");
-    subdiv2.setAttribute("vertical-align", "top");
-    subdiv2.appendChild(button);
-    
-    // APPEND DIVS TOGETHER
-    text.appendChild(subdiv1);
-    text.appendChild(subdiv2);
-    div.appendChild(text);
+
+      // CREATE BUTTON AND STYLE
+      var button = document.createElement("paper-toggle-button");
+      button.setAttribute("class", "bluetooth");
+      button.setAttribute("id", test.col_names[j]);
+      button.addEventListener("change", function() {flipState(this);})
+      
+      // DIV FOR BUTTON
+      var subdiv2 = document.createElement("div");
+      subdiv2.setAttribute("align", "center");
+      subdiv2.appendChild(button);
+      
+      // APPEND DIVS TOGETHER
+      td.appendChild(subdiv1);
+      td.appendChild(spacingDivMiddle);
+      td.appendChild(subdiv2);
+      td.appendChild(spacingDivBelow);
+      row.appendChild(td);
+    }
+    table.appendChild(row);
   }
-  buttons.appendChild(div);
+  buttons.appendChild(table);
 </script>
