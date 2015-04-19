@@ -125,7 +125,7 @@ app.post('/data_upload', [
               util.log('The representation of ' + dataset.path + ' has been saved in database.');
 
               // send the metadata back to the client
-              res.render('renderer.ejs', {metadata: new_dataset_rep, data: doc);
+              res.render('renderer.ejs', {metadata: new_dataset_rep, data: doc});
             });
           });
           parser.on('readable', function () {
