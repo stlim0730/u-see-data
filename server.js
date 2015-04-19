@@ -22,7 +22,7 @@ var fs = require('fs');
 var mongoose = require('mongoose');
 var schema; // require after db connection
 var util = require('./my_util.js');
-var csv = require('csv-streamify');
+var csv = require('csv-streamify'); // https://github.com/klaemo/csv-stream
 
 // schema classes
 var Dataset; // define after db connection
@@ -125,7 +125,7 @@ app.post('/data_upload', [
               util.log('The representation of ' + dataset.path + ' has been saved in database.');
 
               // send the metadata back to the client
-              res.render('renderer.ejs', {metadata: new_dataset_rep});
+              res.render('renderer.ejs', {metadata: new_dataset_rep, data: doc);
             });
           });
           parser.on('readable', function () {
