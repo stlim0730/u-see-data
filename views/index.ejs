@@ -10,7 +10,6 @@
     <script src='/bower_components/webcomponentsjs/webcomponents.js'></script>
     <script src='/public/js/jquery/jquery-1.11.2.min.js'></script>
 
-    <link rel='import' href='/bower_components/font-roboto/roboto.html' />
     <link rel='import' href='/bower_components/core-header-panel/core-header-panel.html' />
     <link rel='import' href='/bower_components/core-toolbar/core-toolbar.html' />
     <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html' />
@@ -21,281 +20,184 @@
     <link rel='import' href='/bower_components/google-signin/google-signin.html' />
     <link rel='import' href='/bower_components/google-signin/google-signin-aware.html' />
 
+    <link href='http://fonts.googleapis.com/css?family=Lato:200,400,700' rel='stylesheet' type='text/css' />
+
     <style shim-shadowdom>
 
-    html,body {
-      height: 100%;
-    }
+      html, body {
+        height: 100%;
+      }
 
-    body{
-      margin: 0;
-      font-family: sans-serif;
-    }
+      body {
+        margin: 0;
+        font-family: 'Lato', sans-serif;
+        font-weight: 200;
+      }
 
-    core-header-panel {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background-color: #eee;
-    }
-    
-    core-header-panel[mode=cover]::shadow #mainContainer {
-      left: 70px;
-    }
+      core-header-panel {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #eee;
+      }
+      
+      core-header-panel[mode=cover]::shadow #mainContainer {
+        left: 70px;
+      }
 
-    .core-header {
-      height: 60px;
-      line-height: 60px;
-      font-size: 28px;
-      padding: 0 20px;
-      background-color: #4F7DC9;
-      color: #FFF;
-      transition: height 0.2s;
-    }
-    
-    .core-header.medium-tall {
-      height: 120px;
-    }
+      .core-header {
+        height: 60px;
+        line-height: 60px;
+        font-size: 28px;
+        padding: 0 20px;
+        background-color: #4F7DC9;
+        color: #FFF;
+        transition: height 0.2s;
+      }
+      
+      .core-header.medium-tall {
+        height: 120px;
+      }
 
-    .content {
-      height: 1000px;
-      background: linear-gradient(rgb(214, 227, 231), lightblue);
-    }
+      .content {
+        height: 1000px;
+        background: linear-gradient(rgb(214, 227, 231), lightblue);
+      }
 
-    paper-button[raised]{
-      font-size: 14px;
-      padding: 3px;
-      height: 30px;
-      width: 110px;
-      line-height: 1em;
-    }
+      paper-button[raised] {
+        font-size: 14px;
+        padding: 3px;
+        height: 30px;
+        width: 110px;
+        line-height: 1em;
+      }
 
-    paper-button[raised].hover:hover{
-      background: #eee;
-      font-size: 14px;
-      padding: 3px;
-      height: 30px;
-      width: 110px;
-      line-height: 1em;
-    }
+      paper-button[raised].hover:hover {
+        background: #eee;
+        font-size: 14px;
+        padding: 3px;
+        height: 30px;
+        width: 110px;
+        line-height: 1em;
+      }
 
-    section {
-      padding: 24px;
-    }
+      section {
+        padding: 24px;
+      }
 
-  </style>
-  <style>
-    #Mission{
-        height:80%;
-        background-color: #D1F0FF;
-    }
+      section.first {
+          height: 80%;
+          background-color: #D1F0FF;
+      }
 
-    #Team{
-        height:90%;
-        background-color: #B2E6FF;
-    }
+      section.odd {
+          height: 90%;
+          background-color: #D1F0FF;
+      }
 
-    #Testimonials{
-      height: 90%;
-      background-color: #D1F0FF;
-    }
+      section.even {
+          height: 90%;
+          background-color: #B2E6FF;
+      }
 
-    #Contact{
-      height: 90%;
-      background-color: #B2E6FF;
-    }
+      img.personal {
+        width: 150px;
+        border-radius: 70%;
+        vertical-align: middle;
+      }
 
-    img.personal{
-      max-width: 150px;
-      max-height: auto;
-      border-radius: 70%;
-    }
+      img.logo {
+        height: 150px;
+      }
 
-    img.logo{
-      max-width: auto;
-      max-height: 150px;
-    }
+      .section-title {
+        font-size: 2em;
+        text-align: center;
+        text-decoration: none;
+      }
 
-    center.standard{
-      font-weight: bold;
-      font-family: verdana;
-      font-size: 200%;
-      text-decoration: none;
-      position: relative;
-      top: 10%;
-      transform: translateY(-50);
-    }
+      a.one {
+        font-size: 1.25em;
+        text-align: center;
+        text-decoration: none;
+      }
 
-/*    center.mission{
-      position: relative;s
-      top: 50%;
-      transform: translateY(-50);
-    }*/
+      a.one:link {
+        color: #000000;
+      }
 
-    a.one{
-      font-weight: bold;
-      font-family: verdana;
-      font-size: 1.25em;
-      text-align: center;
-      text-decoration: none;
-    }
+      a.one:visited {
+        color: #ffffff;
+      }
 
-    a.one:link{
-      color:#000000;
+      a.one:hover {
+        color: #ffff00;
+        text-shadow: 0 0 4px #999;
+      }
 
-    }
-    a.one:visited{
-      color:#ffffff;
-    }
-    a.one:hover{
-      color:#ffff00;
-      text-shadow: 0 0 4px #999;
-    }
+      p {
+        font-size: 1.2em;
+        padding-left: 10%;
+        padding-right: 10%;
+      }
 
-    p{
-      color: black;
-      font-family: verdana;
-      font-size: 150%;
-    }
+      p.name {
+        font-weight: 700;
+        font-size: 1.5em;
+        font-style: italic;
+      }
 
-    p.test{
+      .centered {
+        text-align: center;
+      }
 
-    }
+      .quotes {
+        align-items: center;
+        justify-content: center;
+        vertical-align: middle;
+      }
 
-    p.name{
-      font-weight: bold;
-      font-size: 150%;
-      font-style: italic;
-    }
+    </style>
+  </head>
+  
+  <body unresolved>
+    <core-header-panel mode='waterfall-tall' tallClass='medium-tall'>
+      <div class='core-header'>
+        <div horizontal justified layout>
+          <div>
+            <a href='/index'><img class='large logo' src='/images/analytics.png'></a>
+          </div>
 
-    #Quotes{
-      align-items: center;
-      justify-content: center;
-      vertical-align: middle;
-    }
+          <div flex>
+            <paper-tabs id='tabs' selected='all' self-end>
+              <paper-tab name='mission'>
+                <a class='one' href='#mission'>Mission</a>
+              </paper-tab>
+              <paper-tab name='team'>
+                <a class='one' href='#team'>Team</a>
+              </paper-tab>
+              <paper-tab name='testimonials'>
+                <a class='one' href='#testimonials'>Testimonials</a>
+              </paper-tab>
+              <paper-tab name='contact'>
+                <a class='one' href='#contact'>Contact Us</a>
+              </paper-tab>
+              <paper-tab name='signin'>
+                <!-- Beginning of SHIT -->
+                <section>
+                  <x-container></x-container>
+                </section>
 
-</style>
-</head>
-<body unresolved>
-    <core-header-panel mode="waterfall-tall" tallClass="medium-tall">
-    <div class="core-header">
-      <div horizontal justified layout>
-
-        <div><a href="/index"><img class="logo" src="/images/analytics.png" class="large"></a></div>
-
-
-        <div flex>
-          <paper-tabs id="tabs" selected="all" self-end>
-          <paper-tab name="mission"><a class="one" href="#Mission">Mission</a></paper-tab>
-          <paper-tab name="team"><a class="one" href="#Team">Team</a></paper-tab>
-          <paper-tab name="testimonials"><a class="one" href="#Testimonials">Testimonials</a></paper-tab>
-          <paper-tab name="contact"><a class="one" href="#Contact">Contact Us</a></paper-tab>
-        <paper-tab name="signin">  
-        <div>
-            <!-- Beginning of SHIT -->
-            <section>
-              <x-container></x-container>
-            </section>
-
-            <!-- a simple dialog element made with core-overlay -->
-            <polymer-element name="x-dialog" attributes="opened autoCloseDisabled">
-            <template>
-              <style>
-
-                :host {
-                  box-sizing: border-box;
-                  -moz-box-sizing: border-box;
-                  font-family: Arial, Helvetica, sans-serif;
-                  font-size: 13px;
-                  -webkit-user-select: none;
-                  -moz-user-select: none;
-                  overflow: hidden;
-                  background: white;
-                  padding:30px 42px;
-                  outline: 1px solid rgba(0,0,0,0.2);
-                  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-                }
-
-              </style>
-              <core-overlay id="overlay" layered backdrop opened="{{opened}}" autoCloseDisabled="{{autoCloseDisabled}}"  transition="core-transition-center"></core-overlay>
-              <content></content>
-            </template>
-            <script>
-
-            Polymer('x-dialog', {
-            
-              ready: function() {
-                this.$.overlay.target = this;
-              },
-
-              toggle: function() {
-                this.$.overlay.toggle();
-              }
-
-            });
-
-            </script>
-            </polymer-element>
-
-
-            <!-- an element that uses the x-dialog element and core-overlay -->
-            <polymer-element name="x-container">
-            <template>
-
-              <style>
-
-                paper-button[raised]{
-                  font-size: 14px;
-                  padding: 3px;
-                  height: 30px;
-                  width: 110px;
-                  line-height: 1em;
-                }
-
-                paper-button[raised].hover:hover{
-                  background: #eee;
-                  font-size: 14px;
-                  padding: 3px;
-                  height: 30px;
-                  width: 110px;
-                  line-height: 1em;
-                }
-              </style>
-              <x-dialog id="dialog" class="dialog">
-                <!-- place all overlay styles inside the overlay target -->
-                <style no-shim>
-                  .dialog {
-                    box-sizing: border-box;
-                    -moz-box-sizing: border-box;
-                    font-family: Arial, Helvetica, sans-serif;
-                    font-size: 13px;
-                    -webkit-user-select: none;
-                    -moz-user-select: none;
-                    overflow: hidden;
-                    background: white;
-                    padding:30px 42px;
-                    outline: 1px solid rgba(0,0,0,0.2);
-                    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-                  }
-
-                  #dialog {
-                    width: 500px;
-                  }
-                </style>
-                <h2>Sign in with Google</h2>
-                <p><center><google-signin clientId="181698801589-et4kdl1onab8gcq874go9cg0ukrgq5p1.apps.googleusercontent.com" scopes="profile" theme="light" width="standard" height="standard"></google-signin></center></p>
-
-                <div>
-                  <br>
-                  <core-overlay layered id="confirmation" class="dialog" backdrop transition="core-transition-top">
-                    <!-- place all overlay styles inside the overlay target -->
-                    <style no-shim>
-                      .dialog {
+                <!-- a simple dialog element made with core-overlay -->
+                <polymer-element name='x-dialog' attributes='opened autoCloseDisabled'>
+                  <template>
+                    <style>
+                      :host {
                         box-sizing: border-box;
                         -moz-box-sizing: border-box;
-                        font-family: Arial, Helvetica, sans-serif;
+                        /*font-family: Arial, Helvetica, sans-serif;*/
                         font-size: 13px;
                         -webkit-user-select: none;
                         -moz-user-select: none;
@@ -305,126 +207,183 @@
                         outline: 1px solid rgba(0,0,0,0.2);
                         box-shadow: 0 4px 16px rgba(0,0,0,0.2);
                       }
-
-                      #confirmation {
-                        box-sizing: border-box;
-                        text-align: center;
-                        width: 150px;
+                    </style>
+                    <core-overlay id='overlay' layered backdrop opened='{{opened}}' autoCloseDisabled='{{autoCloseDisabled}}'  transition='core-transition-center'></core-overlay>
+                    <content></content>
+                  </template>
+                  <script>
+                    Polymer('x-dialog', {
+                      ready: function() {
+                        this.$.overlay.target = this;
+                      },
+                      toggle: function() {
+                        this.$.overlay.toggle();
+                      }
+                    });
+                  </script>
+                </polymer-element>
+                <!-- an element that uses the x-dialog element and core-overlay -->
+                <polymer-element name='x-container'>
+                  <template>
+                    <style>
+                      paper-button[raised]{
+                        font-size: 14px;
+                        padding: 3px;
+                        height: 30px;
+                        width: 110px;
+                        line-height: 1em;
                       }
 
+                      paper-button[raised].hover:hover{
+                        background: #eee;
+                        font-size: 14px;
+                        padding: 3px;
+                        height: 30px;
+                        width: 110px;
+                        line-height: 1em;
+                      }
                     </style>
-                  </core-overlay>
-                </div><br><br>
-              </x-dialog>
+                    <x-dialog id='dialog' class='dialog'>
+                      <!-- place all overlay styles inside the overlay target -->
+                      <style no-shim>
+                        .dialog {
+                          box-sizing: border-box;
+                          -moz-box-sizing: border-box;
+                          /*font-family: Arial, Helvetica, sans-serif;*/
+                          font-size: 13px;
+                          -webkit-user-select: none;
+                          -moz-user-select: none;
+                          overflow: hidden;
+                          background: white;
+                          padding:30px 42px;
+                          outline: 1px solid rgba(0,0,0,0.2);
+                          box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                        }
 
-              <paper-button raised class="hover" on-tap="{{tapHandler}}">Sign In</paper-button>
-            </template>
-            <script>
-            
-            Polymer('x-container', {
-            
-              // inputHandler: function(e) {
-              //   if (e.target.value === 'something') {
-              //     this.$.confirmation.toggle();
-              //   }
-              // },
-              tapHandler: function() {
-                this.$.dialog.toggle();
-              }
-            
-            });
-            
-            </script>
-            </polymer-element>
-          <!-- END OF SHIT -->
-          </paper-tab>
+                        #dialog {
+                          width: 500px;
+                        }
+                      </style>
+                      <h2>Sign in with Google</h2>
+                      <p class='centered'>
+                        <google-signin clientId='181698801589-et4kdl1onab8gcq874go9cg0ukrgq5p1.apps.googleusercontent.com' scopes='profile' theme='light' width='standard' height='standard'></google-signin>
+                      </p>
+                      <div>
+                        <br />
+                        <core-overlay layered id='confirmation' class='dialog' backdrop transition='core-transition-top'>
+                          <!-- place all overlay styles inside the overlay target -->
+                          <style no-shim>
+                            .dialog {
+                              box-sizing: border-box;
+                              -moz-box-sizing: border-box;
+                              font-size: 13px;
+                              -webkit-user-select: none;
+                              -moz-user-select: none;
+                              overflow: hidden;
+                              background: white;
+                              padding:30px 42px;
+                              outline: 1px solid rgba(0,0,0,0.2);
+                              box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                            }
+
+                            #confirmation {
+                              box-sizing: border-box;
+                              text-align: center;
+                              width: 150px;
+                            }
+                          </style>
+                        </core-overlay>
+                      </div>
+                      <br /><br />
+                    </x-dialog>
+                  <paper-button raised class='hover' on-tap='{{tapHandler}}'>Sign In</paper-button>
+                </template>
+                <script>
+                  Polymer('x-container', {
+                    // inputHandler: function(e) {
+                    //   if (e.target.value === 'something') {
+                    //     this.$.confirmation.toggle();
+                    //   }
+                    // },
+                    tapHandler: function() {
+                      this.$.dialog.toggle();
+                    }
+                  });
+                </script>
+                </polymer-element>
+              <!-- END OF SHIT -->
+            </paper-tab>
           </paper-tabs>
-        </div>
-
-
-
-
-
-
-
-
-
         </div>
       </div>
     </div>
-    <div class="content">
-      <div id="Mission">
-        <div>
-          <center class="standard"> Our Mission Statement </center>
+    <div class='content'>
+      <section id='mission' class='first'>
+        <div class='section-title'>
+          Our Mission Statement
         </div>
         <div>
-          <center class="mission"><p>uSee Data is trying to make data visualization easy. Anybody in the world should be able to visualize their datasets without any technical background. Our goal is to give our users dynamic, cutting-edge data visualizations with ease and great interfaces.</p></center>
+          <p>
+            uSee Data is trying to make data visualization easy. Anybody in the world should be able to visualize their datasets without any technical background. Our goal is to give our users dynamic, cutting-edge data visualizations with ease and great interfaces.
+          </p>
         </div>
-        <div>
-          <center><img src="/images/centerpic.png" class="large"></center>
+        <div class='centered'>
+          <img src='/images/centerpic.png' class='large'></center>
         </div>
+      </section>
 
-      </div>
-
-      <div id="Team">
-        <div>
-          <center class="standard">Our Team</center>
+      <section id='team' class='even'>
+        <div class='section-title'>
+          Our Team
           <br><br><br><br><br><br><br><br>
         </div>
         <div horizontal justified layout>
-          <div flex><center><a href="https://www.linkedin.com/in/danieldobalian"><img class="personal" src="/images/dan.jpg" class="large"></a></center></div>
-          <div flex><center><a href="https://www.linkedin.com/pub/seongtaek-lim/30/880/414"><img class="personal" src="/images/taek.jpg" class="large"></a></center></div>
-          <div flex><center><a href="https://www.linkedin.com/pub/vivian-lo/78/814/8b8"><img class="personal" src="/images/viv.jpg" class="large"></a></center></div>
+          <div flex class='centered'>
+            <a href='https://www.linkedin.com/in/danieldobalian'><img class='personal' src='/images/dan.jpg'></a>
+          </div>
+          <div flex class='centered'>
+            <a href='https://www.linkedin.com/pub/seongtaek-lim/30/880/414'><img class='personal' src='/images/taek.jpg'></a>
+          </div>
+          <div flex class='centered'>
+            <a href='https://www.linkedin.com/pub/vivian-lo/78/814/8b8'><img class='personal' src='/images/viv.jpg'></a>
+          </div>
         </div>
-      </div>
+      </section>
 
+      <section id='testimonials' class='odd'>
+        <div class='section-title'>
+          Testimonials
+        </div>
+        <div class='quotes'>
+          <p>
+            <q>I can see uSee Data being a very useful tool. I work with many researchers who are desperate to reach the public directly. By sharing findings and integrating people into the collection process, the public can be part of the research process. I have interviewed many environmentalists who go out in field teams to do species count surveys and have had a of trouble of combining their data with other groups. This information can be used to make important wildlife decisions, but right now there are not many tools easy enough for volunteers to use. Journalists need data too.</q>
+          </p>
+          <p class='name centered'>
+            - Ashley Ahearn (Journalist, NPR)
+          </p>
+          <br><br><br><br>
+          <p>
+            <q>I really like the geological integration with the idea. If smart phones, data mapping, and civilian science were combined, then a lot of conservation research could be made easier. With new technology that can map images into three dimensional figures, hikers could take photos of glaciers in order to help track the size changes. A lot of data about these shrinking glaciers and other natural resources are being lost, but uSee Data could provide an easy way for people to pool together information.</q>
+          </p>
+          <p class='name centered'>
+            - Michael Murray (CEO/Founder, Lucid Design Group, Energy Visualization Company)
+          </p>
+          <br><br><br><br>
+          <p>
+            <q>Graphs allow you to not stumble into ambiguity. Words are too ambiguous and can mean anything to anyone. Visuals are solid. Modern journalism is steering away from black and white to graphics. There&apos;s just too much information to digest, people want it fast and simple.</q>
+          </p>
+          <p class='name centered'>
+            - Nikos Zarikos (Editor, Berkeley Tech Review)
+          </p>
+        </div>
+      </section>
 
-      <div id="Testimonials">
-        <div>
-          <center class="standard">Testimonials</center>
+      <section id='contact' class='even'>
+        <div class='section-title'>
+          Email us your praise
         </div>
-
-        <div id="Quotes">
-        <div>
-                <p>
-                <q>I can see uSee Data being a very useful tool. I work with many researchers who are desperate
-                to reach the public directly. By sharing findings and integrating people into the collection
-                process, the public can be part of the research process. I have interviewed many
-                environmentalists who go out in field teams to do species count surveys and have had a of
-                trouble of combining their data with other groups. This information can be used to make
-                important wildlife decisions, but right now there are not many tools easy enough for volunteers
-                to use. Journalists need data too.</q>
-                </p>
-                <center><p class="name">-Ashley Ahearn (Journalist, NPR)</p></center><br><br><br><br>
-        </div>
-        <div>
-                <p>
-                <q>I really like the geological integration with the idea. If smart phones, data mapping, and
-                civilian science were combined, then a lot of conservation research could be made easier. With
-                new technology that can map images into three dimensional figures, hikers could take photos
-                of glaciers in order to help track the size changes. A lot of data about these shrinking glaciers
-                and other natural resources are being lost, but uSee Data could provide an easy way for people
-                to pool together information.</q>
-                </p>
-                <center><p class="name">-Michael Murray (CEO/Founder, Lucid Design Group, Energy Visualization Company)</p></center><br><br><br><br>
-        </div>
-        <div>
-                <p>
-                <q>Graphs allow you to not stumble into ambiguity. Words are too ambiguous and can mean
-                anything to anyone. Visuals are solid. Modern journalism is steering away from black and white
-                to graphics. There&apos;s just too much information to digest, people want it fast and simple.</q>
-                </p>
-                <center><p class="name">-Nikos Zarikos (Editor, Berkeley Tech Review)</p></center>
-        </div>
-        </div>
-      </div>
-
-      <div id="Contact">
-        <center class="standard">Email us your praise</center>
-      </div>
-      
+      </section>
     </div>
   </core-header-panel>
-
 </body>
 </html>
