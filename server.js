@@ -9,6 +9,8 @@ else {
   conf = require('./default_conf.json');
 }
 
+var chart_reqs = require('./chart_reqs.json');
+
 // set directories
 var public_dir = __dirname + conf.public_dir;
 var bower_components_dir = __dirname + conf.bower_components_dir;
@@ -143,7 +145,7 @@ app.post('/visualizer', [
 
                   fs.unlink(upload_dir + '/' + user_file.originalname, function (err) {
                     // send the metadata back to the client
-                    res.render('visualizer.ejs', {metadata: metadata, data: data});
+                    res.render('visualizer.ejs', {metadata: metadata, data: data, chart_reqs: chart_reqs});
                   });
                 });
               });
@@ -252,7 +254,7 @@ app.post('/visualizer', [
                   col_types[i] = 'undefined';
                 }
               }
-              
+
               // update database after parsing
               var user_id = 'user';
               var now = new Date();
@@ -283,7 +285,7 @@ app.post('/visualizer', [
 
                   fs.unlink(upload_dir + '/' + user_file.originalname, function (err) {
                     // send the metadata back to the client
-                    res.render('visualizer.ejs', {metadata: metadata, data: data});
+                    res.render('visualizer.ejs', {metadata: metadata, data: data, chart_reqs:chart_reqs});
                   });
                 });
               });
