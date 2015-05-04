@@ -61,5 +61,19 @@
       </div>
 
     </core-header-panel>
+
+    <script>
+      $('core-header-panel').scroll(function (e) {
+        var t = parseInt($('div.content').offset().top);
+        if (t <= 50) {
+          $('#logo-img').css('height', '1.5em');
+          $('#logo-img').attr('src', '/images/textLogo.png');
+        }
+        else {
+          $('#logo-img').css('height', '4.5em');
+          $('#logo-img').attr('src', '/images/useedata.png');
+        }
+      });
+    </script>
   </body>
 </html>
