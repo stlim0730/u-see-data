@@ -22,10 +22,12 @@ var multer  = require('multer');
 var fs = require('fs');
 var mongoose = require('mongoose');
 var schema; // require after db connection
-var util = require('./my_util.js');
+var util = require('util');
+var my_util = require('./my_util.js');
 var csv = require('csv-streamify'); // https://github.com/klaemo/csv-stream
 
 // schema classes
+var Metadata; // define after db connection
 var Dataset; // define after db connection
 
 // set the server
@@ -46,13 +48,14 @@ var db_uri = process.env.MONGOLAB_URI ||
 // set database
 mongoose.connect(db_uri, function (err, res) {
   if (err) {
-    util.log ('Error in connecting to Mongoose: ' + db_uri);
+    my_util.log ('Error in connecting to Mongoose: ' + db_uri);
     throw err;
   }
   else {
-    util.log('Successfully connected to Mongoose: ' + db_uri);
+    my_util.log('Successfully connected to Mongoose: ' + db_uri);
     schema = require('./schema.js');
-    Dataset = mongoose.model('Dataset', schema.datasetSchema)
+    Metadata = mongoose.model('Metadata', schema.metadataSchema);
+    Dataset = mongoose.model('Dataset', schema.datasetSchema);
   }
 });
 
@@ -65,10 +68,6 @@ app.get('/upload', function (req, res) {
   res.render('upload.ejs');
 });
 
-// app.get('/renderer', function (req, res) {
-//   res.render('renderer.ejs');
-// });
-
 app.post('/visualizer', [
   multer({ dest: upload_dir }),
   function (req, res) {
@@ -76,101 +75,220 @@ app.post('/visualizer', [
     // TODO: limit file size?
     // TODO: validate the csv file: missing values, missing columns
     // TODO: file management per user: manipulate directory name for data repository
-    fs.unlink(user_file.originalname, function (err) { // remove existing file with the same temporary file name
+    fs.unlink(upload_dir + '/' + user_file.originalname, function (err) { // remove existing file with the same temporary file name
       var random_file_name = upload_dir + '/' + user_file.name;
       var file_name = upload_dir + '/' + user_file.originalname;
+
       fs.rename(random_file_name, file_name,
         function (err) {
           if (err) throw err;
-          util.log('uploading complete');
-          
-          // parse csv file
+          my_util.log('uploading complete');
+
           var col_names = [];
           var col_types = [];
           var row_num = -1;
-          var fstream = fs.createReadStream(file_name);
-          var parser = csv(require('./default_csv_conf.json'), function (err, doc) {
-            if (err) throw err;
-            
-            // aggregate datatypes
-            // TODO: polish datatype rule
-            for (var i=0; i < col_types.length; i++) {
-              var types = col_types[i];
-              if (types.length == 1) {
-                // homogeneous datatype
-                col_types[i] = types[0];
-              }
-              else if (util.arrayContains(types, typeof 'string')) {
-                // if there is one or more string as a value for this column, the column's datatype is string.
-                col_types[i] = typeof 'string';
-              }
-              else {
-                util.log('Unexpected datatype');
-                col_types[i] = 'undefined';
-              }
-            }
 
-            // update database after parsing
-            var new_dataset_rep = new Dataset({
-              user: 'user', // TODO: user identifier
-              date: new Date(), // TODO: timezone resolution: currently it uses UTC
-              path: file_name,
-              file_size: user_file.size,
-              col_num: col_names.length,
-              row_num: row_num,
-              col_names: col_names,
-              col_types: col_types
+          if (file_name.indexOf('.csv') >= 0) {
+
+            var fstream = fs.createReadStream(file_name);
+            // parse csv file
+            var parser = csv(require('./default_csv_conf.json'), function (err, data) {
+              if (err) throw err;
+              
+              // aggregate datatypes
+              // TODO: polish datatype rule
+              for (var i=0; i < col_types.length; i++) {
+                var types = col_types[i];
+                if (types.length == 1) {
+                  // homogeneous datatype
+                  col_types[i] = types[0];
+                }
+                else if (my_util.arrayContains(types, typeof 'string')) {
+                  // if there is one or more string as a value for this column, the column's datatype is string.
+                  col_types[i] = typeof 'string';
+                }
+                else {
+                  my_util.log('Unexpected datatype');
+                  col_types[i] = 'undefined';
+                }
+              }
+
+              // update database after parsing
+              var user_id = 'user';
+              var now = new Date();
+              var metadata = new Metadata({
+                user: user_id, // TODO: user identifier
+                date: now, // TODO: timezone resolution: currently it uses UTC
+                file_size: user_file.size,
+                col_num: col_names.length,
+                row_num: row_num,
+                col_names: col_names,
+                col_types: col_types
+              });
+              var dataset = new Dataset({
+                user: user_id,
+                date: now,
+                data: data
+              });
+
+              metadata.save(function (err, md) {
+                if (err) throw err;
+
+                my_util.log('The metadata has been saved in database.');
+
+                dataset.save(function (err, d) {
+                  if (err) throw err;
+
+                  my_util.log('The dataset has been saved in database.')
+
+                  fs.unlink(upload_dir + '/' + user_file.originalname, function (err) {
+                    // send the metadata back to the client
+                    res.render('visualizer.ejs', {metadata: metadata, data: data});
+                  });
+                });
+              });
             });
-            new_dataset_rep.save(function (err, dataset) {
+
+            parser.on('readable', function () {
+              var record = parser.read();
+              row_num = parser.lineNo; // starts from 1
+              
+              // extract column names
+              if (row_num == 1) {
+                for (key in record) {
+                  col_names.push(key.trim());
+                  col_types.push([]);
+                }
+              }
+
+              // extracts all the possible datatypes
+              if (record) {
+                for (var i=0; i < col_names.length; i++) {
+                  var key = col_names[i];
+                  var value = record[key];
+                  if (!value) continue; // skip missing values
+                  value = value.trim();
+                  var type;
+
+                  if (isNaN(value)) {
+                    // likely string
+                    type = typeof 'string';
+                  }
+                  else {
+                    // number
+                    type = typeof 123;
+                  }
+                  // console.log(value + ', ' + type + ', ' + isNaN(value));
+
+                  // keep it if it's new
+                  if (!my_util.arrayContains(col_types[i], type)) {
+                    col_types[i].push(type);
+                  }
+                }
+              }
+            });
+
+            fstream.pipe(parser);
+
+            // redirect the user to somewhere: it's asynchronous!
+            // res.redirect('/renderer');
+          }
+          else if (file_name.indexOf('.json') >= 0) {
+            fs.readFile(file_name, function (err, file_content) {
               if (err) throw err;
 
-              util.log('The representation of ' + dataset.path + ' has been saved in database.');
+              var data = JSON.parse(file_content);
 
-              // send the metadata back to the client
-              res.render('visualizer.ejs', {metadata: new_dataset_rep, data: doc});
-            });
-          });
-          parser.on('readable', function () {
-            var record = parser.read();
-            row_num = parser.lineNo; // starts from 1
-            
-            // extract column names
-            if (row_num == 1) {
-              for (key in record) {
+              if (!util.isArray(data) || data.length < 1) {
+                return;
+              }
+
+              for (key in data[0]) {
                 col_names.push(key.trim());
                 col_types.push([]);
               }
-            }
 
-            // extracts all the possible datatypes
-            if (record)
-              for (var i=0; i < col_names.length; i++) {
-                var key = col_names[i];
-                var value = record[key];
-                if (!value) continue; // skip missing values
-                value = value.trim();
-                var type;
+              for (var i = 0; i < data.length; i++) {
+                var record = data[i];
 
-                if (isNaN(value)) {
-                  // likely string
-                  type = typeof 'string';
-                }
-                else {
-                  // number
-                  type = typeof 123;
-                }
-                // console.log(value + ', ' + type + ', ' + isNaN(value));
+                for (var j = 0; j < col_names.length; j++) {
+                  var key = col_names[j];
+                  var value = record[key];
+                  if (!value) continue; // skip missing values
+                  value = value;
+                  var type;
 
-                // keep it if it's new
-                if (!util.arrayContains(col_types[i], type)) {
-                  col_types[i].push(type);
+                  if (isNaN(value)) {
+                    // likely string
+                    type = typeof 'string';
+                  }
+                  else {
+                    // number
+                    type = typeof 123;
+                  }
+                  // console.log(value + ', ' + type + ', ' + isNaN(value));
+
+                  // keep it if it's new
+                  if (!my_util.arrayContains(col_types[j], type)) {
+                    col_types[j].push(type);
+                  }
                 }
               }
-          });
-          fstream.pipe(parser);
 
-          // redirect the user to somewhere: it's asynchronous!
-          // res.redirect('/renderer');
+              // aggregate datatypes
+              // TODO: polish datatype rule
+              for (var i=0; i < col_types.length; i++) {
+                var types = col_types[i];
+                if (types.length == 1) {
+                  // homogeneous datatype
+                  col_types[i] = types[0];
+                }
+                else if (my_util.arrayContains(types, typeof 'string')) {
+                  // if there is one or more string as a value for this column, the column's datatype is string.
+                  col_types[i] = typeof 'string';
+                }
+                else {
+                  my_util.log('Unexpected datatype');
+                  col_types[i] = 'undefined';
+                }
+              }
+              
+              // update database after parsing
+              var user_id = 'user';
+              var now = new Date();
+              var metadata = new Metadata({
+                user: user_id, // TODO: user identifier
+                date: now, // TODO: timezone resolution: currently it uses UTC
+                file_size: user_file.size,
+                col_num: col_names.length,
+                row_num: row_num,
+                col_names: col_names,
+                col_types: col_types
+              });
+              var dataset = new Dataset({
+                user: user_id,
+                date: now,
+                data: data
+              });
+
+              metadata.save(function (err, md) {
+                if (err) throw err;
+
+                my_util.log('The metadata has been saved in database.');
+
+                dataset.save(function (err, d) {
+                  if (err) throw err;
+
+                  my_util.log('The dataset has been saved in database.');
+
+                  fs.unlink(upload_dir + '/' + user_file.originalname, function (err) {
+                    // send the metadata back to the client
+                    res.render('visualizer.ejs', {metadata: metadata, data: data});
+                  });
+                });
+              });
+            });
+          }
       });
     });
   }
@@ -178,4 +296,4 @@ app.post('/visualizer', [
 
 // start the server
 app.listen(port_number);
-util.log('the server is running on ' + port_number);
+my_util.log('the server is running on ' + port_number);
