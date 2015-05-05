@@ -17,8 +17,11 @@
     <link rel='import' href='/bower_components/core-icon-button/core-icon-button.html' />
     <link rel='import' href='/bower_components/core-transition/core-transition-css.html' />
     <link rel='import' href='/bower_components/core-overlay/core-overlay.html' />
-    <link rel='import' href='/bower_components/google-signin/google-signin.html' />
-    <link rel='import' href='/bower_components/google-signin/google-signin-aware.html' />
+    <link rel='import' href='/bower_components/paper-toast/paper-toast.html' />
+    <link rel='import' href='/bower_components/paper-input/paper-input.html' />
+    <link rel='import' href='/bower_components/paper-input/paper-autogrow-textarea.html' />
+    <link rel='import' href='/bower_components/paper-input/paper-input-decorator.html' />
+    <link rel='import' href='/bower_components/paper-input/paper-char-counter.html' />
 
     <link href='http://fonts.googleapis.com/css?family=Lato:200,400,700' rel='stylesheet' type='text/css' />
 
@@ -45,7 +48,7 @@
 
       .content {
         height: 1000px;
-        background: linear-gradient(rgb(214, 227, 231), lightblue);
+        background: white;
       }
 
       .sub-left {
@@ -59,13 +62,16 @@
         width: 70%;
       }
 
+      #rotateStatus {
+        margin-left: 100px;
+      }
     </style>
   </head>
   
   <body unresolved>
     <core-header-panel mode='waterfall-tall' tallClass='medium-tall'>
       
-      <% include partials/header %>
+      <% include partials/header_small %>
 
       <div class='content'>
         <script>
@@ -81,85 +87,22 @@
 
         <div class='sub-right'>
           <% include partials/chart %>
-          <!-- something comes later -->
+
+          <div>
+            <paper-input id='xval' onkeydown='if(event.keyCode == 13) {updateXAxis()}' label='X-Axis Title' floatingLabel></paper-input>
+            <paper-input id='yval' onkeydown='if(event.keyCode == 13) {updateYAxis()}' label='Y-Axis Title' floatingLabel></paper-input>
+            <paper-toggle-button id='rotateStatus' class='bluetooth' onclick='updateRotate()'></paper-toggle-button>Rotate
+          </div>
+          <div class='export'>
+            <paper-button raised onclick='document.querySelector("#toast").show()' style='background-color:#4fa7dd'>Embed</paper-button>
+            <paper-toast id='toast' text='SVG Copied to Clipboard'></paper-toast>
+          </div>
         </div>
       </div>
     </core-header-panel>
 
-    <script src='/public/js/vkbeautify/vkbeautify.js'></script>
     <script>
-      // var svg;
-      // function exportCode() {
-        // var code;
-        // svg = $('#chart > svg')[0];
-        // $(svg).find('defs').remove();
-        // $(svg).find().each(function (index, elem) {
-        //   var cls = $(elem).attr('class');
-        //   if (cls.indexOf('c3-') > -1) {
-        //     // C3 styling is used.
-        //   }
-        //   else {
-          
-        //   }
-        // });
-        // Get rules from c3.css
-        // for (var i = 0; i <= document.styleSheets.length - 1; i++) {
-        //   if (document.styleSheets[i].href
-        //     && document.styleSheets[i].href.indexOf('c3.min.css') !== -1) {
-        //     if (document.styleSheets[i].rules !== undefined) {
-        //       chartStyle = document.styleSheets[i].rules;
-        //     }
-        //     else {
-        //       chartStyle = document.styleSheets[i].cssRules;
-        //     }
-        //   }
-        // }
-
-        // if (chartStyle !== null && chartStyle !== undefined) {
-        //   // SVG doesn't use CSS visibility and opacity is an attribute, not a style property. Change hidden stuff to "display: none"
-        //   var changeToDisplay = function() {
-        //     if (angular.element(this).css('visibility') === 'hidden'
-        //       || angular.element(this).css('opacity') === '0') {
-        //       angular.element(this).css('display', 'none');
-        //     }
-        //   };
-
-        //   // Inline apply all the CSS rules as inline
-        //   for (i = 0; i < chartStyle.length; i++) {
-        //     if (chartStyle[i].type === 1) {
-        //       selector = chartStyle[i].selectorText;
-        //       styles = makeStyleObject(chartStyle[i]);
-        //       angular.element('svg *').each(changeToDisplay);
-        //       angular.element(selector).not('.c3-chart path').css(styles);
-        //     }
-
-        //     /* C3 puts line colour as a style attribute, which gets overridden
-        //        by the global ".c3 path, .c3 line" in c3.css. The .not() above
-        //        prevents that, but now we need to set fill to "none" to prevent
-        //        weird beziers.
-        //        Which screws with pie charts and whatnot, ergo the is() callback.
-        //     */
-        //     angular.element('.c3-chart path')
-        //       .filter(function(){
-        //         return angular.element(this).css('fill') === 'none';
-        //       })
-        //       .attr('fill', 'none');
-
-        //     angular.element('.c3-chart path')
-        //       .filter(function(){
-        //         return angular.element(this).css('fill') !== 'none';
-        //       })
-        //       .attr('fill', function(){
-        //         return angular.element(this).css('fill');
-        //       });
-        //   }
-        // }
-
-      //   var serializer = new XMLSerializer();
-      //   var svg_serial = serializer.serializeToString(svg);
-
-      //   console.log(svg_serial);
-      // }
+      
     </script>
   </body>
 </html>

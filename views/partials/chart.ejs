@@ -10,13 +10,13 @@
 
   #chart {
     margin-top: 50px;
-    margin-right: 150px;
-    min-height: 600px;
+    margin-right: 75px;
+    min-height: 450px;
   }
 
-  #chart > svg > g {
-    min-height: 500px;
-  }
+  /*#chart > svg > g {
+    min-height: 400px;
+  }*/
 
   .c3-chart-lines
   {
@@ -32,6 +32,7 @@
         <script>
 
         function render_simple_chart(div, cols, type) {
+            typeOfChart = type;
             if (type=='gauge') {
                 // TODO: data aggregation
                 chart = c3.generate({
@@ -48,6 +49,21 @@
                     data: {
                         columns: cols,
                         type: type
+                    },
+                    axis: {
+                        x: {
+                            label: {
+                                text: globalX,
+                                position: 'outer-middle'
+                            }
+                        },
+                        y: {
+                          label: {
+                                text: globalY,
+                                position: 'outer-middle'
+                            }  
+                        },
+                        rotated: globalRotate
                     }
                 });
             }
@@ -144,9 +160,31 @@
         // });
         // }
 
+        function updateYAxis() {
+            globalY = $('#yval').val();
+            render_simple_chart('#chart', tempData, typeOfChart)
+        }
+
+        function updateXAxis() {
+            globalX = $('#xval').val();
+            render_simple_chart('#chart', tempData, typeOfChart)
+        }
+
+        function updateRotate() {
+            console.log(rotateStatus.checked);
+            globalRotate = !rotateStatus.checked;//TODO
+            chart = null;
+            render_simple_chart('#chart', tempData, typeOfChart)
+        }
+
         var mat = json2array(data);
         var tempData = JSON.parse(JSON.stringify(mat));
         var chart = null;
-        render_simple_chart('#chart', tempData, 'line');
+        var globalX = '';
+        var globalY = '';
+        var globalRotate = 0;
+        var typeOfChart = 'line';
+        render_simple_chart('#chart', tempData, typeOfChart);
 
         </script>
+        <script src='/public/js/svg_crowbar/svg_crowbar2-.js'></script>

@@ -91,5 +91,14 @@
         "strreq": 0,
         "flex": 1,
         "totalmax": 4
+    },
+    {
+        "chartType":"spline",
+        "chartName":"Spline Chart",
+        "imgsrc":"spline.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 1,
+        "totalmax": 6
     }
 ]

@@ -1,0 +1,249 @@
+<style>
+  .core-header {
+    height: 60px;
+    line-height: 60px;
+    font-size: 28px;
+    padding: 0 20px;
+    background-color: #4FA7DD;
+    color: #FFF;
+    transition: height 0.6s;
+  }
+  
+  .core-header.standard {
+    height: 20%;
+  }
+
+  a.one {
+    font-size: 1.50em;
+    text-align: center;
+    text-decoration: none; 
+    }
+
+  a.one:link {
+    color: #000000;
+  }
+
+  a.one:visited {
+    color: #ffffff;
+  }
+
+  a.one:hover {
+    color: #000000;
+    text-shadow: 0 0 4px #999;
+  }
+
+  section {
+    padding: 24px;
+  }
+
+  section.first {
+      height: 80%;
+      background-color: #D1F0FF;
+  }
+
+  section.odd {
+      height: 90%;
+      background-color: #D1F0FF;
+  }
+
+  section.even {
+      height: 90%;
+      background-color: #B2E6FF;
+  }
+
+  section.last {
+      height: 20%;
+      background-color: #B2E6FF;
+  }
+
+  img.personal {
+    width: 150px;
+    border-radius: 70%;
+    vertical-align: middle;
+  }
+
+  #logo-small-img {
+    height: 1.5em;
+    margin: 5px;
+  }
+
+  .section-title {
+    font-size: 2em;
+    text-align: center;
+    text-decoration: none;
+  }
+</style>
+
+<div class='core-header'>
+  <div horizontal justified layout>
+    <div>
+      <a href='/'><img class='large logo' id='logo-small-img' src='/images/textLogo.png'></a>
+    </div>
+
+    <div flex>
+      <paper-tabs id='tabs' selected='all' self-end>
+        <paper-tab name='mission'>
+          <a class='one' href='/#mission' style="color:black">Mission</a>
+        </paper-tab>
+        <paper-tab name='team'>
+          <a class='one' href='/#team' style="color:black">Team</a>
+        </paper-tab>
+        <paper-tab name='testimonials'>
+          <a class='one' href='/#testimonials' style="color:black">Testimonials</a>
+        </paper-tab>
+        <paper-tab name='contact'>
+          <a class='one' href='/#contact' style="color:black">Contact Us</a>
+        </paper-tab>
+        <paper-tab name='signin'>
+          <!-- Beginning of SHIT -->
+          <section>
+            <x-container></x-container>
+          </section>
+
+          <!-- a simple dialog element made with core-overlay -->
+          <polymer-element name='x-dialog' attributes='opened autoCloseDisabled'>
+            <template>
+              <style>
+                :host {
+                  box-sizing: border-box;
+                  -moz-box-sizing: border-box;
+                  /*font-family: Arial, Helvetica, sans-serif;*/
+                  font-size: 13px;
+                  -webkit-user-select: none;
+                  -moz-user-select: none;
+                  overflow: hidden;
+                  background: white;
+                  padding:30px 42px;
+                  outline: 1px solid rgba(0,0,0,0.2);
+                  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                  height: 20%;
+                  width: 25px;
+                }
+              </style>
+              <core-overlay id='overlay' layered backdrop opened='{{opened}}' autoCloseDisabled='{{autoCloseDisabled}}'  transition='core-transition-center'></core-overlay>
+              <content></content>
+            </template>
+            <script>
+              Polymer('x-dialog', {
+                ready: function() {
+                  this.$.overlay.target = this;
+                },
+                toggle: function() {
+                  this.$.overlay.toggle();
+                }
+              });
+            </script>
+          </polymer-element>
+          <!-- an element that uses the x-dialog element and core-overlay -->
+          <polymer-element name='x-container'>
+            <template>
+              <style>
+                paper-button[raised]{
+                  font-size: 14px;
+                  padding: 3px;
+                  line-height: 1em;
+                }
+
+                paper-button[raised].hover:hover{
+                  background: #eee;
+                  font-size: 14px;
+                  padding: 3px;
+                  line-height: 1em;
+                }
+              </style>
+              <x-dialog id='dialog' class='dialog'>
+                <!-- place all overlay styles inside the overlay target -->
+                <style no-shim>
+                  .dialog {
+                    box-sizing: border-box;
+                    -moz-box-sizing: border-box;
+                    /*font-family: Arial, Helvetica, sans-serif;*/
+                    font-size: 13px;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    overflow: hidden;
+                    background: white;
+                    padding:30px 42px;
+                    outline: 1px solid rgba(0,0,0,0.2);
+                    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                    height:20%;
+                  }
+
+                  #dialog {
+                    width: 500px;
+                  }
+                </style>
+                <h2>Sign in with Google</h2>
+                <p class='centered'>
+                  <google-signin clientId='181698801589-et4kdl1onab8gcq874go9cg0ukrgq5p1.apps.googleusercontent.com' scopes='profile' theme='light' width='standard' height='standard'></google-signin>
+                </p>
+                <div>
+                  <br />
+                  <core-overlay layered id='confirmation' class='dialog' backdrop transition='core-transition-top'>
+                    <!-- place all overlay styles inside the overlay target -->
+                    <style no-shim>
+                      .dialog {
+                        box-sizing: border-box;
+                        -moz-box-sizing: border-box;
+                        font-size: 13px;
+                        -webkit-user-select: none;
+                        -moz-user-select: none;
+                        overflow: hidden;
+                        background: white;
+                        padding:30px 42px;
+                        outline: 1px solid rgba(0,0,0,0.2);
+                        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                      }
+
+                      #confirmation {
+                        box-sizing: border-box;
+                        text-align: center;
+                        width: 150px;
+                      }
+                    </style>
+                  </core-overlay>
+                </div>
+                <br /><br />
+              </x-dialog>
+              <paper-button raised class='hover signin-button' on-tap='{{buttonHandler}}' style="color:#303030;background:white;font-size:1.1em">Upload Data</paper-button>
+            </template>
+            <script>
+              Polymer('x-container', {
+                // inputHandler: function(e) {
+                //   if (e.target.value === 'something') {
+                //     this.$.confirmation.toggle();
+                //   }
+                // },
+                buttonHandler: function() {
+                  window.location = '/upload';
+                },
+                tapHandler: function() {
+                     var additionalParams = {
+                       'callback': signinCallback
+                     };
+                  gapi.auth.signIn(additionalParams);
+                  this.$.dialog.toggle();
+                }
+              });
+              function signinCallback(authResult) {
+                if (authResult['status']['signed_in']) {
+                  // Update the app to reflect a signed in user
+                  // Hide the sign-in button now that the user is authorized, for example:
+                  document.getElementById('signinButton').setAttribute('style', 'display: none');
+                } else {
+                  // Update the app to reflect a signed out user
+                  // Possible error values:
+                  //   "user_signed_out" - User is signed-out
+                  //   "access_denied" - User denied access to your app
+                  //   "immediate_failed" - Could not automatically log in the user
+                  console.log('Sign-in state: ' + authResult['error']);
+                }
+              }
+            </script>
+          </polymer-element>
+          <!-- END OF SHIT -->
+        </paper-tab>
+      </paper-tabs>
+    </div>
+  </div>
+</div>
