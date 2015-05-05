@@ -15,7 +15,14 @@
   }
 
   img.list{
-    max-width: 120px;
+    height: 3em;
+    cursor: pointer;
+  }
+
+  img.disable {
+    height: 3em;
+    opacity: 0.2;
+    filter: alpha(opacity=20); /* For IE8 and earlier */
   }
 
   core-icon {
@@ -33,28 +40,97 @@
   .clear-both {
    clear: both;
   }
+  
+  #chart_options {
+    margin-left: 40px;
+    margin-right: 40px;
+  }
 </style>
 
 <section>
-  <div id='sub-title'>
-    <div id='sub-left'>
-      <paper-item id='barchart'>
-        <img class='list' onclick='updateGraphType("bar")' src='/images/bar.png'>
-      </paper-item>
-      <paper-item id='scatterchart'>
-        <img class='list' onclick='updateGraphType("scatter")' src='/images/scatter.png'>
-      </paper-item>
-    </div>
-
-    <div id='sub-right'>
-      <paper-item id='piechart'>
-        <img class='list' onclick='updateGraphType("pie")' src='/images/pie.png'>
-      </paper-item>
-
-      <paper-item id='linechart'>
-        <img class='list' onclick='updateGraphType("line")' src='/images/line.png'>
-      </paper-item>
-    </div>
-    <div class='clear-both'></div>
-  </div>
+  <div id="chart_options"></div>
 </section>
+
+<script>
+  // DUMMY VARIABLES
+  // JSON HAS TO COME IN HERE INSTEAD
+  // UPDATE PLACES THAT SAY test.col_names
+  var nums = 0;
+  var strs = 0;
+
+  for(var i = 0; i < metadata.col_types.length; i = i + 1){
+    if(metadata.col_types[i] == "number"){
+      nums = nums + 1;
+    }
+    else{
+      strs = strs + 1;
+    }
+  }
+
+  var table = document.createElement("table");
+  $('table').css('margin-left', '40px');
+  $('table').css('margin-right', '40px');
+
+  // TO MAKE MORE COLLUMS CHANGE NUM_OF_COLS
+  // EVERYTHING WILL RENDER CORRECTLY
+  var num_of_cols = 3;
+
+  // FORLOOP MAKES A TABLE FOR THE IMAGES
+  for(var i = 0; i < chart_reqs.length + num_of_cols; i=i+num_of_cols){
+    var row = document.createElement("tr");
+    for(var j = i; j < chart_reqs.length && j < i+num_of_cols; j++){
+      //PARENT DIV
+      var td = document.createElement("td");
+
+      //DIV FOR LABEL
+      var subdiv1 = document.createElement("div");
+      var label = document.createTextNode(chart_reqs[j].chartName);
+      subdiv1.setAttribute("align", "center");
+      //COMMENT THE NEXT LINE TO REMOVE THE NAMES ON THE IMAGES
+      subdiv1.appendChild(label);
+
+      // SPACING DIV, EDIT SPACING WITH CSS
+      spacingDivMiddle = document.createElement("div");
+      spacingDivMiddle.setAttribute("class", "spacingMiddle");
+
+      // SPACING DIV, EDIT SPACING WITH CSS
+      spacingDivBelow = document.createElement("div");
+      spacingDivBelow.setAttribute("class", "spacingBelow");
+
+      // CREATE BUTTON AND STYLE
+      var button = document.createElement("paper-item");
+      button.setAttribute("id", chart_reqs[j].chartType + "chart");
+
+      // ADD IMAGE AND CLICK
+      var img = document.createElement("img");
+      img.setAttribute("class", "list");
+      img.setAttribute("src", '/images/' + chart_reqs[j].imgsrc);
+
+      /*
+      At this point the following if statement will turn a 
+      chart on or off. if(true) will turn it to clickable.
+      Need some boolean to make this happen.
+      */
+      if(chart_reqs[j].flex <= nums + strs && chart_reqs[j].totalmax >= nums + strs){
+        img.setAttribute("onclick", "updateGraphType('" + chart_reqs[j].chartType + "')");
+      } else{
+        img.setAttribute("class", "disable");
+      }
+      button.appendChild(img);
+      
+      // DIV TO HELP SPACING AND PACKAGE TOGETHER
+      var subdiv2 = document.createElement("div");
+      subdiv2.setAttribute("align", "center");
+      subdiv2.appendChild(button);
+      
+      // APPEND DIVS TOGETHER
+      td.appendChild(subdiv1);
+      td.appendChild(spacingDivMiddle);
+      td.appendChild(subdiv2);
+      td.appendChild(spacingDivBelow);
+      row.appendChild(td);
+    }
+    table.appendChild(row);
+  }
+  $('#chart_options').append(table);
+</script>

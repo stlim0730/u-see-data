@@ -29,7 +29,7 @@
 
 
 <section>
-  <div id="buttons"></div>
+  <div id="field_options"></div>
 </section>
 
 <script>
@@ -71,6 +71,7 @@
 
       // CREATE BUTTON AND STYLE
       var button = document.createElement("paper-toggle-button");
+      button.checked = true;
       button.setAttribute("class", "bluetooth");
       button.setAttribute("id", test.col_names[j]);
       button.addEventListener("change", function() {flipState(this);})
@@ -89,5 +90,5 @@
     }
     table.appendChild(row);
   }
-  buttons.appendChild(table);
+  $('#field_options').append(table);
 </script>

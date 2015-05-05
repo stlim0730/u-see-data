@@ -26,102 +26,127 @@
 </style>
 
 
-<div id = "chart">
+        <div id = "chart">
             
         </div>
         <script>
-        var mat = json2array(data);
-        var chart = c3.generate({
-                    bindto: '#chart',
-                    data: {
-                      columns: mat
-                    }
 
+        function render_simple_chart(div, cols, type) {
+            if (type=='gauge') {
+                // TODO: data aggregation
+                chart = c3.generate({
+                    bindto: div,
+                    data: {
+                        columns: cols,
+                        type: type
+                    }
                 });
-        var typeofChart = 'line';
-
-        function uncheckGraphColumns(column){
-            var columns = new Array(column);
-            chart.unload(columns);
-        }
-
-        function checkGraphColumns(column){
-            var size = mat.length;
-            var selected;
-            for (var i=0;i<size;i++){
-                if (mat[i][0] == column){
-                    selected = mat[i];
-                }
             }
-            selected = {columns: [selected]};
-            chart.load(selected);
-        }
-
-        function updateGraphType(charttype){
-            typeofChart = charttype;
-            chart = c3.generate({
-                    bindto: '#chart',
+            else {
+                chart = c3.generate({
+                    bindto: div,
                     data: {
-                      columns: json2array(data),
-                      type: typeofChart
+                        columns: cols,
+                        type: type
                     }
-
-            });
+                });
+            }
         }
 
-        function updateAxis(axisname, labelname){
-            // typeofChart = "scatter";
-
-
-
-
-            // chart = c3.generate({
-            //         bindto: '#chart',
-            //         data: {
-            //           columns: json2array(data),
-            //           type: typeofChart
-            //         },
-            //         axis:{
-            //             y: {
-            //                 categories: ['mina']
-            //             }
-            //         }
-
-            // });          
-        }
-
-        function json2array(d){
-            var columnnames = new Array();
-            var arr;
-            for (var key in d[0]) {
-                arr = new Array(key);
-                //arr.push(key);
-                columnnames.push(arr);
-            };
-            var length = columnnames.length;
-            var dataSize = d.length;
-            for (var i=0;i<length;i++){
-                var column = columnnames[i];
-                var category = column[0];
-                for (var k = 0; k<dataSize;k++){
-                    var item = d[k];
-                    column.push(item[category]);
+        function uncheckGraphColumns(column_name) {
+            var deleteIndex = -1;
+            for (var i = 0; i < tempData.length; i++) {
+                if (tempData[i][0] == column_name) {
+                    deleteIndex = i;
+                    break;
                 }
             }
-            return columnnames;
+
+            if (deleteIndex < 0) return;
+
+            chart.unload({
+              ids: [tempData[deleteIndex][0]]
+            });
+
+            tempData.splice(deleteIndex, 1);
+            console.log(tempData);
         }
 
-        function Unupdate(){
-            var chart = c3.generate({
-            bindto: '#chart',
-            data: {
-              columns: mat
+        function checkGraphColumns(column_name) {
+            var selected = -1;
+            for (var i = 0; i < mat.length; i++) {
+                if (mat[i][0] == column_name) {
+                    selected = i;
+                    break;
+                }
             }
 
-        });
+            if (selected < 0) return;
+            
+            tempData.splice(selected, 0, mat[selected])
+            console.log(tempData);
+            chart.load({columns: tempData});
         }
 
+        function updateGraphType(charttype) {
+            var col_names = [];
+            for (var i=0; i<tempData.length;i++) {
+                col_names.push(tempData[i][0]);
+            }
+            console.log(tempData);
 
+            if (charttype.indexOf("combination") > -1){
+                // var types = ['line','scatter','step','spline'];
+                // var dataToTypes = {};
+                // for (var n = 0; n < col_names.length; n++) {
+                //     if (n > types.length) {
+                //         break;
+                //     }
+                //     dataToTypes[col_names[n]] = types[n];
+                // }
 
+                // chart = render_chart('#chart', tempData, null, dataToTypes);
+            }
+            else if (charttype.indexOf("stacked") > -1){
+                // render_chart('#chart', tempData, 'bar', null, [names]);
+            }
+            else {
+                chart = null;
+                render_simple_chart('#chart', tempData, charttype);
+            }
+        }
+
+        function json2array(obj){
+            var matrix = new Array();
+
+            for(var i=0; i<metadata.col_num; i++) {
+                matrix.push(new Array());
+                matrix[i].push(metadata.col_names[i]);
+            }
+
+            for(var i=0; i<matrix.length;i++) {
+                key = matrix[i][0];
+                for(var j=0; j<obj.length; j++) {
+                    var row = obj[j];
+                    matrix[i].push(row[key]);
+                }
+            }
+
+            return matrix;
+        }
+
+        // function Unupdate(){
+        //     var chart = c3.generate({
+        //     bindto: '#chart',
+        //     data: {
+        //       columns: mat
+        //     }
+        // });
+        // }
+
+        var mat = json2array(data);
+        var tempData = JSON.parse(JSON.stringify(mat));
+        var chart = null;
+        render_simple_chart('#chart', tempData, 'line');
 
         </script>
