@@ -1,0 +1,95 @@
+[
+    {
+        "chartType":"barGraph",
+        "chartName":"Bar Graph",
+        "imgsrc":"bar.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex":1,
+        "totalmax": 50
+    },
+    {
+        "chartType":"lineGraph",
+        "chartName":"Line Graph",
+        "imgsrc":"line.png",
+        "numreq": 0,
+        "strreq": 0,
+        "strreq": 0,
+        "flex":1,
+        "totalmax": 50
+    },
+    {
+        "chartType":"pieChart",
+        "chartName":"Pie Chart",
+        "imgsrc":"pie.png",
+        "numreq": 0,
+        "strreq": 0,
+        "strreq": 0,
+        "flex": 2,
+        "totalmax": 50
+    },
+    {
+        "chartType":"scatterPlot",
+        "chartName":"Scatter Plot",
+        "imgsrc":"scatter.png",
+        "numreq": 0,
+        "strreq": 0,
+        "strreq": 0,
+        "flex": 1,
+        "totalmax": 50
+    },
+    {
+        "chartType":"gaugeChart",
+        "chartName":"Gauge Chart",
+        "imgsrc":"gauge.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 3,
+        "totalmax": 50
+    },
+    {
+        "chartType":"donutChart",
+        "chartName":"Donut Chart",
+        "imgsrc":"donut.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 2,
+        "totalmax": 50
+    },
+    {
+        "chartType":"stepChart",
+        "chartName":"Step Chart",
+        "imgsrc":"step.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 1,
+        "totalmax": 50
+    },
+    {
+        "chartType":"stackedAreaChart",
+        "chartName":"Stacked Area Chart",
+        "imgsrc":"stackedarea.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 1,
+        "totalmax": 4
+    },
+    {
+        "chartType":"stackedBarChart",
+        "chartName":"Stacked Bar Chart",
+        "imgsrc":"stackedbar.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 1,
+        "totalmax": 5
+    },
+    {
+        "chartType":"combination",
+        "chartName":"Combo Chart",
+        "imgsrc":"combo.png",
+        "numreq": 0,
+        "strreq": 0,
+        "flex": 1,
+        "totalmax": 4
+    }
+]
