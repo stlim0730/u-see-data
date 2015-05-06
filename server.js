@@ -99,7 +99,7 @@ app.post('/visualizer', [
               
               // aggregate datatypes
               // TODO: polish datatype rule
-              for (var i=0; i < col_types.length; i++) {
+              for (var i=0; i < col_names.length; i++) {
                 var types = col_types[i];
                 if (types.length == 1) {
                   // homogeneous datatype
@@ -110,7 +110,7 @@ app.post('/visualizer', [
                   col_types[i] = typeof 'string';
                 }
                 else {
-                  my_util.log('Unexpected datatype');
+                  my_util.log('Unexpected datatype detected');
                   col_types[i] = 'undefined';
                 }
               }
