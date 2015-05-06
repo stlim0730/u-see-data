@@ -71,7 +71,7 @@
     // $('#textbox').val(svg[0]);
     var parser = new DOMParser();
     var dom = parser.parseFromString(svg[0], "text/html");
-    var svg_text = $(dom).find('svg')[0].outerHTML;
+    svg_text = $(dom).find('svg')[0].outerHTML;
 
     // console.log(typeof );
     // $('#textbox').val($(dom).find('svg')[0].outerHTML);

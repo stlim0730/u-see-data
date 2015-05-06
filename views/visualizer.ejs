@@ -94,15 +94,26 @@
             <paper-toggle-button id='rotateStatus' class='bluetooth' onclick='updateRotate()'></paper-toggle-button>Rotate
           </div>
           <div class='export'>
-            <paper-button raised onclick='document.querySelector("#toast").show()' style='background-color:#4fa7dd'>Embed</paper-button>
+            <paper-button raised id='embed-button' onclick='document.querySelector("#toast").show()' style='background-color:#4fa7dd'>Embed</paper-button>
             <paper-toast id='toast' text='SVG Copied to Clipboard'></paper-toast>
           </div>
         </div>
       </div>
     </core-header-panel>
+    <input type='hidden' id='hidden-input' value='' />
 
+    <script src='/public/js/zclip/jquery.zclip.min.js'></script>
     <script>
-      
+    var svg_text;
+      $(document).ready(function () {
+        $('#hidden-input').val(svg_text);
+        $('#embed-button').zclip({
+          path: 'http://www.steamdev.com/zclip/js/ZeroClipboard.swf',
+          copy: function () {
+            return $('input#hidden-input').val();
+          }
+        });
+      });
     </script>
   </body>
 </html>
